@@ -37,16 +37,18 @@ data/hapt (raw UCI release)
 All numbers below are read from `results/**/test_metrics.json` / `opentslm_test_metrics.json`;
 nothing is estimated.
 
-| Model | macro-F1 | transition macro-F1 | accuracy | status |
-| --- | --- | --- | --- | --- |
-| ResNet1D (242.7k params, GH200) | 0.7695 | 0.6257 | 0.8846 | done |
-| PatchTransformer1D (540.0k params, GH200) | 0.7632 | 0.6328 | 0.8655 | done |
-| OpenTSLM-SP gemma-3-270m (frozen LLM) | _pending_ | _pending_ | _pending_ | training |
-| OpenTSLM-SP gemma-3-270m + LoRA | _pending_ | _pending_ | _pending_ | training |
+| Model | macro-F1 | transition macro-F1 | accuracy | parse rate | status |
+| --- | --- | --- | --- | --- | --- |
+| ResNet1D (242.7k params) | 0.7695 | 0.6257 | 0.8846 | n/a | done (GH200) |
+| PatchTransformer1D (540.0k params) | 0.7632 | 0.6328 | 0.8655 | n/a | done (GH200) |
+| OpenTSLM-SP gemma-3-270m (frozen LLM) | 0.0642 | 0.0293 | 0.0680 | 0.705 | done (GH200) |
+| OpenTSLM-SP gemma-3-270m + LoRA r=16 | 0.1602 | 0.0814 | 0.1872 | 0.998 | done (GH200) |
+| OpenTSLM-SP gemma-3-270m + LoRA (gentler LR) | 0.1898 | 0.0806 | 0.3521 | 0.985 | done (GH200) |
 
-Baselines trained on Isambard-AI GH200 (`slurm/train_baseline.sbatch`, jobs 8744269/8744270);
-local CPU replication in `results/local/` gives macro-F1 0.7768 / 0.7528 respectively.
-OpenTSLM runs: jobs 8744578 (LoRA) / 8744579 (frozen).
+Baselines: Isambard-AI GH200 jobs 8744269/8744270; OpenTSLM: jobs 8744578 (LoRA) /
+8744579 (frozen) / 8744973 (LoRA, lr 3e-5, early stop epoch 6). Generations parsed by
+first label mention (`parse_rule` in each metrics JSON). Local CPU replication of the
+baselines in `results/local/` gives macro-F1 0.7768 / 0.7528 — same ordering.
 
 Figures: `results/figures/` (confusion matrices, per-class F1, model comparison, example
 transition windows).

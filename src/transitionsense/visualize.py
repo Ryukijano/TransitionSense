@@ -21,8 +21,20 @@ from transitionsense.data import load_trials
 from transitionsense.labels import ACTIVITY_NAMES, TRANSITION_INDICES
 
 
+METRICS_NAMES = ("test_metrics.json", "opentslm_test_metrics.json")
+
+
+def _metrics_path(model_dir: Path) -> Path | None:
+    """Return the metrics JSON inside ``model_dir`` (supervised or generative name)."""
+    for name in METRICS_NAMES:
+        path = model_dir / name
+        if path.is_file():
+            return path
+    return None
+
+
 def _model_dirs(results_dir: Path, models: list[str] | None = None) -> list[Path]:
-    """Return result subdirectories that hold a ``test_metrics.json``.
+    """Return result subdirectories that hold a metrics JSON.
 
     Args:
         results_dir: Directory containing per-model result subdirectories.
@@ -38,17 +50,22 @@ def _model_dirs(results_dir: Path, models: list[str] | None = None) -> list[Path
         dirs = sorted(
             path
             for path in results_dir.iterdir()
-            if (path / "test_metrics.json").is_file() and not path.name.endswith("-smoke")
+            if path.is_dir()
+            and _metrics_path(path) is not None
+            and not path.name.endswith("-smoke")
         )
-    missing = [path.name for path in dirs if not (path / "test_metrics.json").is_file()]
+    missing = [path.name for path in dirs if _metrics_path(path) is None]
     if missing:
-        raise FileNotFoundError(f"no test_metrics.json under: {', '.join(missing)}")
+        raise FileNotFoundError(f"no metrics JSON under: {', '.join(missing)}")
     return dirs
 
 
 def _load_metrics(model_dir: Path) -> dict:
     """Read a model's test metrics payload."""
-    return json.loads((model_dir / "test_metrics.json").read_text(encoding="utf-8"))
+    path = _metrics_path(model_dir)
+    if path is None:
+        raise FileNotFoundError(f"no metrics JSON under {model_dir}")
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def plot_confusion_matrices(

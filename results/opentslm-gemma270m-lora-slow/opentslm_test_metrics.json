@@ -1,0 +1,299 @@
+{
+  "n_windows": 3718,
+  "n_unparseable": 55,
+  "parse_rate": 0.985207100591716,
+  "accuracy": 0.3520710059171598,
+  "macro_f1": 0.18980512795157858,
+  "transition_macro_f1": 0.08060646774261364,
+  "per_class": {
+    "walking": {
+      "precision": 0.2773972602739726,
+      "recall": 0.7404021937842779,
+      "f1": 0.40358744394618834,
+      "support": 547
+    },
+    "walking_upstairs": {
+      "precision": 0.28,
+      "recall": 0.0875,
+      "f1": 0.13333333333333333,
+      "support": 560
+    },
+    "walking_downstairs": {
+      "precision": 0.6666666666666666,
+      "recall": 0.17288801571709234,
+      "f1": 0.2745709828393136,
+      "support": 509
+    },
+    "sitting": {
+      "precision": 0.4562043795620438,
+      "recall": 0.2244165170556553,
+      "f1": 0.3008423586040915,
+      "support": 557
+    },
+    "standing": {
+      "precision": 0.5555555555555556,
+      "recall": 0.024549918166939442,
+      "f1": 0.04702194357366771,
+      "support": 611
+    },
+    "laying": {
+      "precision": 0.46776729559748426,
+      "recall": 0.9867330016583747,
+      "f1": 0.6346666666666666,
+      "support": 603
+    },
+    "stand_to_sit": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 51
+    },
+    "sit_to_stand": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 40
+    },
+    "sit_to_lie": {
+      "precision": 0.05555555555555555,
+      "recall": 0.15,
+      "f1": 0.08108108108108109,
+      "support": 60
+    },
+    "lie_to_sit": {
+      "precision": 0.3023255813953488,
+      "recall": 0.24528301886792453,
+      "f1": 0.27083333333333326,
+      "support": 53
+    },
+    "stand_to_lie": {
+      "precision": 0.08333333333333333,
+      "recall": 0.11842105263157894,
+      "f1": 0.09782608695652174,
+      "support": 76
+    },
+    "lie_to_stand": {
+      "precision": 0.125,
+      "recall": 0.0196078431372549,
+      "f1": 0.03389830508474576,
+      "support": 51
+    }
+  },
+  "confusion_matrix": [
+    [
+      405,
+      10,
+      9,
+      32,
+      3,
+      36,
+      0,
+      0,
+      24,
+      2,
+      18,
+      0,
+      8
+    ],
+    [
+      155,
+      49,
+      20,
+      24,
+      0,
+      216,
+      0,
+      0,
+      47,
+      2,
+      41,
+      2,
+      4
+    ],
+    [
+      175,
+      98,
+      88,
+      19,
+      1,
+      69,
+      0,
+      0,
+      32,
+      4,
+      14,
+      0,
+      9
+    ],
+    [
+      198,
+      1,
+      0,
+      125,
+      8,
+      188,
+      2,
+      0,
+      10,
+      1,
+      8,
+      0,
+      16
+    ],
+    [
+      466,
+      7,
+      5,
+      67,
+      15,
+      22,
+      0,
+      0,
+      11,
+      0,
+      10,
+      0,
+      8
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      595,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      7
+    ],
+    [
+      15,
+      3,
+      2,
+      2,
+      0,
+      13,
+      0,
+      0,
+      11,
+      2,
+      3,
+      0,
+      0
+    ],
+    [
+      25,
+      1,
+      1,
+      4,
+      0,
+      7,
+      0,
+      0,
+      2,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      2,
+      2,
+      0,
+      0,
+      38,
+      0,
+      0,
+      9,
+      3,
+      5,
+      1,
+      0
+    ],
+    [
+      3,
+      0,
+      1,
+      0,
+      0,
+      28,
+      0,
+      0,
+      1,
+      13,
+      0,
+      4,
+      3
+    ],
+    [
+      12,
+      2,
+      1,
+      1,
+      0,
+      36,
+      0,
+      0,
+      14,
+      1,
+      9,
+      0,
+      0
+    ],
+    [
+      6,
+      2,
+      3,
+      0,
+      0,
+      24,
+      0,
+      0,
+      1,
+      14,
+      0,
+      1,
+      0
+    ]
+  ],
+  "classes": [
+    "walking",
+    "walking_upstairs",
+    "walking_downstairs",
+    "sitting",
+    "standing",
+    "laying",
+    "stand_to_sit",
+    "sit_to_stand",
+    "sit_to_lie",
+    "lie_to_sit",
+    "stand_to_lie",
+    "lie_to_stand"
+  ],
+  "transition_classes": [
+    "stand_to_sit",
+    "sit_to_stand",
+    "sit_to_lie",
+    "lie_to_sit",
+    "stand_to_lie",
+    "lie_to_stand"
+  ],
+  "reject_column": "unparseable",
+  "model": "opentslm-sp/google/gemma-3-270m",
+  "lora": true,
+  "lora_r": 16,
+  "llm_params": 271895808,
+  "adapter_params": 2193792,
+  "trainable_params": 5990784,
+  "epochs": 8,
+  "best_epoch": 3,
+  "best_val_loss": 0.823025948384946,
+  "batch_size": 8,
+  "seed_note": "single run; seed fixed by torch default",
+  "train_seconds": 855.8217813968658
+}

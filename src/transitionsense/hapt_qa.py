@@ -77,6 +77,46 @@ def normalize_label(text: str) -> str:
     return ""
 
 
+# Every surface form the model might emit, mapped to its canonical label. Longer
+# aliases are matched preferentially so "walking_upstairs" beats "walking".
+_LABEL_PATTERNS: tuple[tuple[str, str], ...] = tuple(
+    sorted(
+        [(name, name) for name in ACTIVITY_NAMES]
+        + [(alias, canonical) for alias, canonical in LABEL_ALIASES.items()],
+        key=lambda item: len(item[0]),
+        reverse=True,
+    )
+)
+
+
+def first_label_in_text(text: str) -> str:
+    """Return the canonical label whose surface form appears earliest in ``text``.
+
+    Generative classifiers are parsed by their first label mention: the model is
+    trained to emit ``<label><eos>``, so the earliest occurrence is the prediction.
+    Ties on position resolve to the longer surface form, then vocabulary order.
+
+    Args:
+        text: Raw generated text (may contain degenerate repetitions).
+
+    Returns:
+        The canonical label name, or ``""`` when no surface form occurs.
+    """
+    lowered = (text or "").lower()
+    best_key: tuple[int, int, int] | None = None
+    best_label = ""
+    for surface, canonical in _LABEL_PATTERNS:
+        pos = lowered.find(surface)
+        if pos < 0:
+            continue
+        # rank: earliest position, then longest surface form, then vocabulary order
+        key = (pos, -len(surface), ACTIVITY_NAMES.index(canonical))
+        if best_key is None or key < best_key:
+            best_key = key
+            best_label = canonical
+    return best_label
+
+
 class HaptWindowDataset(Dataset):
     """Torch dataset over one split's precomputed HAPT windows."""
 

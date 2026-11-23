@@ -109,6 +109,13 @@ def build_html(results_dir: Path, figures_dir: Path, splits_path: Path) -> str:
     for name, path in _metrics_files(results_dir):
         metrics = _load(path)
         extra = metrics.get("extra", metrics)
+        if extra.get("llm_params"):
+            params = (
+                f"{extra.get('trainable_params', 0):,} trainable "
+                f"(+{extra['llm_params']:,} frozen LLM)"
+            )
+        else:
+            params = extra.get("parameters") or extra.get("n_params")
         rows.append(
             {
                 "model": name,
@@ -116,11 +123,7 @@ def build_html(results_dir: Path, figures_dir: Path, splits_path: Path) -> str:
                 "transition_macro_f1": metrics.get("transition_macro_f1"),
                 "accuracy": metrics.get("accuracy"),
                 "parse_rate": metrics.get("parse_rate", 1.0),
-                "n_params": (
-                    extra.get("n_params")
-                    or extra.get("trainable_params")
-                    or extra.get("parameters")
-                ),
+                "n_params": params,
                 "n_windows": metrics.get("n_windows"),
             }
         )

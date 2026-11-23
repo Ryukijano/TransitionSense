@@ -27,7 +27,11 @@ except ImportError:  # tqdm is only guaranteed on the cluster env; degrade grace
     def tqdm(iterable, **_kwargs):  # type: ignore[no-redef]
         return iterable
 
-from transitionsense.hapt_qa import load_prompt_datasets, normalize_label
+from transitionsense.hapt_qa import (
+    first_label_in_text,
+    load_prompt_datasets,
+    normalize_label,
+)
 from transitionsense.labels import ACTIVITY_NAMES
 from transitionsense.metrics import REJECT_INDEX, evaluate_with_reject, write_metrics
 
@@ -86,15 +90,16 @@ def _parameter_counts(model) -> dict[str, int]:
 
 
 def _parse_answer(text: str) -> str:
-    """Extract the label from generated text.
+    """Extract the predicted label from generated text.
 
-    Trained answers are bare labels, so generations usually contain no ``Answer:`` span;
-    fall back to normalizing the whole decoded text (substring match against the vocabulary).
+    Prefers an explicit ``Answer: <label>`` span; otherwise takes the earliest
+    label surface form in the generation (generations are trained as
+    ``<label><eos>`` and may continue degenerately afterwards).
     """
     matches = ANSWER_RE.findall(text or "")
     if matches:
         return normalize_label(matches[-1])
-    return normalize_label(text or "")
+    return first_label_in_text(text or "")
 
 
 @torch.no_grad()

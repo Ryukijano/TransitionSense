@@ -1,0 +1,14 @@
+{
+  "data_dir": "/projects/u6xn/transitionsense/TransitionSense/data/windows",
+  "model": "resnet",
+  "output_dir": "/projects/u6xn/transitionsense/TransitionSense/results/resnet",
+  "epochs": 40,
+  "batch_size": 256,
+  "lr": 0.001,
+  "weight_decay": 0.0001,
+  "seed": 0,
+  "class_weight": "balanced",
+  "device": "cuda",
+  "num_workers": 0,
+  "limit": 0
+}

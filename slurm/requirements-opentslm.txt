@@ -1,0 +1,24 @@
+# OpenTSLM-SP fine-tune environment (Isambard-AI)
+
+Built once on the login node inside the PyTorch container; jobs reuse it.
+
+```bash
+SIF=/projects/u6xn/sif-images/pytorch_26.09-py3.sif
+apptainer exec "$SIF" python -m venv --system-site-packages /projects/u6xn/transitionsense/venv
+apptainer exec "$SIF" /projects/u6xn/transitionsense/venv/bin/pip install \
+    transformers peft tqdm numpy
+```
+
+`--system-site-packages` exposes the container's torch; do **not** pip-install torch (the
+cluster is aarch64 GH200 — an x86 or CUDA-mismatched wheel breaks the job).
+
+Pre-cache the backbone before submitting jobs (no downloads inside Slurm jobs):
+
+```bash
+HF_HOME=/projects/u6xn/hf-cache apptainer exec "$SIF" \
+    /projects/u6xn/transitionsense/venv/bin/python -c \
+    "from huggingface_hub import snapshot_download; snapshot_download('google/gemma-3-270m')"
+```
+
+The Slurm script sets `HF_HUB_OFFLINE=1`/`TRANSFORMERS_OFFLINE=1` so a missing cache fails fast
+instead of downloading mid-job.
